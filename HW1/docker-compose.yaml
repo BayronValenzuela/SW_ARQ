@@ -1,0 +1,41 @@
+services:
+  cart_service:
+    build: ./Cart
+    ports:
+      - "5000:80"
+    volumes:
+      - ./Cart:/code
+    links:
+      - cart_service_mongodb
+
+  cart_service_mongodb:
+    image: mongo:5.0
+    volumes:
+      - cart_service_mongodb_container:/data/db
+    logging:
+      driver: none
+
+  catalog_service:
+    build: ./Catalog
+    ports:
+      - "5001:80"
+    volumes:
+      - ./Catalog:/code
+    links:
+      - catalog_service_mongodb
+
+  catalog_service_mongodb:
+    image: mongo:5.0
+    volumes:
+      - catalog_service_mongodb_container:/data/db
+    logging:
+      driver: none
+
+volumes:
+  cart_service_mongodb_container:
+  catalog_service_mongodb_container:
+
+networks:
+  default:
+    name: tarea_01
+    external: true
